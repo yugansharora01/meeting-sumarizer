@@ -147,3 +147,11 @@ except Exception:
     CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
 CORS_ALLOW_CREDENTIALS = True
+
+BOT_PROVIDER="recall"
+RECALL_API_KEY=os.getenv("RECALL_API_KEY")
+
+REST_FRAMEWORK = {
+    "EXCEPTION_HANDLER":
+        "apps.core.custom_exception_handler.custom_handler"
+}
