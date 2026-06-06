@@ -8,9 +8,10 @@ from asgiref.sync import async_to_sync
 class MeetingService:
 
     @classmethod
-    def create_meeting(cls, meeting_url, join_at):
+    def create_meeting(cls, user, meeting_url, join_at):
         with transaction.atomic():
             meeting = Meeting.objects.create(
+                user=user,
                 meeting_url=meeting_url,
                 title=meeting_url,
                 start_time=join_at,
@@ -20,7 +21,7 @@ class MeetingService:
             if not result:
                 raise ExternalServiceError("Failed to create bot")
             Bot.objects.create(
-                meeting_id=meeting.id,
+                meeting=meeting,
                 provider=result["provider"],
                 provider_bot_id=result["provider_bot_id"],
                 meeting_url=meeting_url,

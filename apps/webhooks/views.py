@@ -16,7 +16,7 @@ class RecallWebhookView(APIView):
             payload=request.body.decode("utf-8"),
         )
         print("Verified webhook")
-        print(request)
+        print(request.body.decode("utf-8"))
 
         return response.success({"message": "Webhook received"})
 

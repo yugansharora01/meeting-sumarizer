@@ -7,7 +7,7 @@ class RecordingType(models.TextChoices):
 
 # Create your models here.
 class Recording(models.Model):
-    meeting_id = models.OneToOneField(
+    meeting = models.OneToOneField(
         Meeting, on_delete=models.DO_NOTHING, primary_key=True
     )
     s3_key = models.CharField(max_length=100)
@@ -16,4 +16,4 @@ class Recording(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.meeting_id.title} Recording"
+        return f"{self.meeting.title} Recording"

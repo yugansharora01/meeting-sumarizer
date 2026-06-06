@@ -9,7 +9,7 @@ class TranscriptStatus(models.TextChoices):
 
 
 class Transcript(models.Model):
-    meeting_id = models.OneToOneField(Meeting, on_delete=models.CASCADE)
+    meeting = models.OneToOneField(Meeting, on_delete=models.CASCADE)
     provider_transcript_id = models.CharField(max_length=100)
     status = models.CharField(max_length=20, choices=TranscriptStatus.choices)
     content = models.TextField()
@@ -17,4 +17,4 @@ class Transcript(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.meeting_id.title} Transcript"
+        return f"{self.meeting.title} Transcript"

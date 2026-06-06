@@ -15,6 +15,12 @@ class MeetingView(APIView):
         if not join_at:
             raise ValidationError("joinAt time is required")
         print(url)
-        result = MeetingService.create_meeting(url,join_at)
+        result = MeetingService.create_meeting(request.user, url, join_at)
         
-        return response.success(result)
+        return response.success({
+            "id": result.id,
+            "title": result.title,
+            "meeting_url": result.meeting_url,
+            "status": result.status,
+            "start_time": result.start_time,
+        })

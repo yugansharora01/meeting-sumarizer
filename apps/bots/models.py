@@ -16,16 +16,16 @@ class BotStatus(models.TextChoices):
 
 # Create your models here.
 class Bot(models.Model):
-    meeting_id = models.OneToOneField(
+    meeting = models.OneToOneField(
         Meeting, on_delete=models.DO_NOTHING, primary_key=True
     )
     provider = models.CharField(max_length=50)
     provider_bot_id = models.CharField(max_length=50)
     status = models.CharField(max_length=30,choices=BotStatus.choices, default=BotStatus.PENDING)
     meeting_url = models.CharField(max_length=100)
-    joined_at = models.DateTimeField()
+    joined_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.meeting_id.title} Bot"
+        return f"{self.meeting.title} Bot"

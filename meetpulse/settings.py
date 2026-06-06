@@ -42,7 +42,10 @@ SECRET_KEY = os.getenv('SECRET_KEY', os.getenv('DJANGO_SECRET'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+_allowed_hosts_env = os.getenv("ALLOWED_HOSTS", "")
+ALLOWED_HOSTS = _allowed_hosts_env.split(",") if _allowed_hosts_env else []
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]  # Allow all hosts in development (e.g. cloudflare tunnel)
 
 
 # Application definition

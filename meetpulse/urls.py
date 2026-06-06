@@ -22,6 +22,6 @@ from apps.webhooks import urls as webhook_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/meetings', include(meeting_urls)),
-    path('api/webhook/', include(webhook_urls)),
+    path('api/webhooks/', include(webhook_urls)),
 ]
     

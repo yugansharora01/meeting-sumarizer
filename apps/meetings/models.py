@@ -11,7 +11,7 @@ class MeetingStatus(models.TextChoices):
 
 class Meeting(models.Model):
     id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="meetings")
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     meeting_url = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
     status = models.CharField(
