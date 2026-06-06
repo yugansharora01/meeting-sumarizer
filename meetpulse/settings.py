@@ -14,6 +14,20 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
+# Django 4.2 compatibility patch with Python 3.14+ (Ref: Ticket #35844)
+from django.template.context import BaseContext
+from copy import copy as _copy
+try:
+    _copy(BaseContext())
+except AttributeError:
+    def _patched_copy(self):
+        duplicate = BaseContext()
+        duplicate.__class__ = self.__class__
+        duplicate.__dict__ = _copy(self.__dict__)
+        duplicate.dicts = self.dicts[:]     #type: ignore
+        return duplicate
+    BaseContext.__copy__ = _patched_copy
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -156,9 +170,18 @@ RECALL_API_KEY=os.getenv("RECALL_API_KEY")
 
 REST_FRAMEWORK = {
     "EXCEPTION_HANDLER":
-        "apps.core.custom_exception_handler.custom_handler"
+        "apps.core.custom_exception_handler.custom_handler",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "apps.accounts.authentication.SupabaseAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 RECALL_VERIFICATION_SECRET = os.getenv("RECALL_VERIFICATION_SECRET")
+
+# Supabase auth
+SUPABASE_URL = os.getenv("SUPABASE_URL", "")

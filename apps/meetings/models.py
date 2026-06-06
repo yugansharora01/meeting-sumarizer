@@ -1,5 +1,5 @@
 from django.db import models
-from apps.accounts.models import User
+from apps.accounts.models import Profile
 
 
 class MeetingStatus(models.TextChoices):
@@ -11,7 +11,7 @@ class MeetingStatus(models.TextChoices):
 
 class Meeting(models.Model):
     id = models.BigAutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="meetings")
     meeting_url = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
     status = models.CharField(
