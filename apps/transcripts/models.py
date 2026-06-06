@@ -1,3 +1,20 @@
+from apps.meetings.models import Meeting
 from django.db import models
 
-# Create your models here.
+
+class TranscriptStatus(models.TextChoices):
+    PENDING = "pending"
+    GENERATED = "generated"
+    FAILED = "failed"
+
+
+class Transcript(models.Model):
+    meeting_id = models.OneToOneField(Meeting, on_delete=models.CASCADE)
+    provider_transcript_id = models.CharField(max_length=100)
+    status = models.CharField(max_length=20, choices=TranscriptStatus.choices)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.meeting_id.title} Transcript"

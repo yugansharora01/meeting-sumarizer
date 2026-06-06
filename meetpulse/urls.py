@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from apps.meetings import urls as meeting_urls
+from apps.webhooks import urls as webhook_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('meetings', include(meeting_urls)),
+    path('api/meetings', include(meeting_urls)),
+    path('api/webhook/', include(webhook_urls)),
 ]
     

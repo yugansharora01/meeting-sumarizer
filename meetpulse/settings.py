@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'apps.transcripts',
     'apps.summaries',
     'apps.core',
+    'apps.recordings',
+    'apps.bots',
+    'apps.webhooks'
 ]
 
 MIDDLEWARE = [
@@ -155,3 +158,7 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER":
         "apps.core.custom_exception_handler.custom_handler"
 }
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+RECALL_VERIFICATION_SECRET = os.getenv("RECALL_VERIFICATION_SECRET")

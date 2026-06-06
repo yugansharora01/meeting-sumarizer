@@ -1,0 +1,21 @@
+from django.conf import settings
+from apps.core.utils.verifyRecall import verify_request_from_recall
+from rest_framework.views import APIView
+from rest_framework.request import Request
+from apps.core.utils import response
+
+class RecallWebhookView(APIView):
+    def post(self, request:Request):
+        verify_request_from_recall(
+            secret=settings.RECALL_VERIFICATION_SECRET,
+            headers={k.lower(): v for k, v in request.headers.items()},
+            payload=request.body.decode("utf-8"),
+        )
+        print("Verified webhook")
+        print(request)
+
+        return response.success({"message": "Webhook received"})
+
+    def get(self, request:Request):
+        print(request.body)
+        return response.success({"message": "Webhook received"})
