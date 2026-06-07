@@ -22,6 +22,7 @@ class Bot(models.Model):
     provider = models.CharField(max_length=50)
     provider_bot_id = models.CharField(max_length=50)
     status = models.CharField(max_length=30,choices=BotStatus.choices, default=BotStatus.PENDING)
+    sub_status=models.CharField(max_length=50, null=True, blank=True)
     meeting_url = models.CharField(max_length=100)
     joined_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

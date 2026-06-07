@@ -1,3 +1,5 @@
+from apps.webhooks.service import WebhookService
+import json
 from django.conf import settings
 from apps.core.utils.verifyRecall import verify_request_from_recall
 from rest_framework.views import APIView
@@ -17,6 +19,11 @@ class RecallWebhookView(APIView):
         )
         print("Verified webhook")
         print(request.body.decode("utf-8"))
+
+        data = request.body.decode("utf-8")
+        data = json.loads(data)
+
+        WebhookService.handle_webhook(data["event"], data["data"])
 
         return response.success({"message": "Webhook received"})
 
