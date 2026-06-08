@@ -1,3 +1,4 @@
+from apps.recordings.models import Recording
 from apps.integrations.bot.base import BaseBotProvider
 from typing import Any, Dict, Optional
 
@@ -31,11 +32,32 @@ class RecallBotProvider(BaseBotProvider):
     async def get_bots(self):
         pass
 
-    async def get_transcript(self):
+    async def get_transcript(self, bot_id: str):
         pass
 
-    async def get_recording(self):
-        pass
+    async def get_recording(self, bot_id: str) -> list:
+        recordings = await self.recall_client.get_recording(bot_id)
+        if len(recordings) == 0:
+            return []
+        media = recordings[0]["media_shortcuts"]
+        print(media)
+        results = []
+        provider_recording_id = recordings[0]["id"]
+        if media.get("video_mixed"):
+            results.append({
+                "type": "video_mixed",
+                "s3_key": media["video_mixed"]["data"]["download_url"],
+                "provider_recording_id": provider_recording_id,
+                "provider_media_id": media["video_mixed"].get("id"),
+            })
+        if media.get("audio_mixed"):
+            results.append({
+                "type": "audio_mixed",
+                "s3_key": media["audio_mixed"]["data"]["download_url"],
+                "provider_recording_id": provider_recording_id,
+                "provider_media_id": media["audio_mixed"].get("id"),
+            })
+        return results
 
-    async def get_status(self):
+    async def get_status(self, bot_id: str):
         pass

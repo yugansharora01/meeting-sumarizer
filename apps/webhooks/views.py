@@ -1,3 +1,4 @@
+from apps.bots.models import BotProvider
 from apps.webhooks.service import WebhookService
 import json
 from django.conf import settings
@@ -23,7 +24,7 @@ class RecallWebhookView(APIView):
         data = request.body.decode("utf-8")
         data = json.loads(data)
 
-        WebhookService.handle_webhook(data["event"], data["data"])
+        WebhookService.handle_webhook(data["event"], data["data"],BotProvider.RECALL, request.path)
 
         return response.success({"message": "Webhook received"})
 

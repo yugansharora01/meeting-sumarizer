@@ -1,4 +1,4 @@
-from apps.meetings.models import Meeting
+from apps.recordings.models import Recording
 from django.db import models
 
 
@@ -9,7 +9,7 @@ class TranscriptStatus(models.TextChoices):
 
 
 class Transcript(models.Model):
-    meeting = models.OneToOneField(Meeting, on_delete=models.CASCADE)
+    recording = models.ForeignKey(Recording, on_delete=models.CASCADE, null=True, blank=True)
     provider_transcript_id = models.CharField(max_length=100)
     status = models.CharField(max_length=20, choices=TranscriptStatus.choices)
     content = models.TextField()
@@ -17,4 +17,4 @@ class Transcript(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.meeting.title} Transcript"
+        return f"{self.recording} Transcript"

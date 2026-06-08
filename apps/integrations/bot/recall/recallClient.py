@@ -44,3 +44,8 @@ class RecallClient:
             raise ExternalServiceError(
                 "Failed to connect to Recall API"
             )
+
+    async def get_recording(self, bot_id: str):
+        result = await self.client.get(f"/bot/{bot_id}")
+        print("result",result.json())
+        return result.json()["recordings"]
