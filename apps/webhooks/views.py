@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.permissions import AllowAny
 from apps.core.utils import response
+from apps.core.utils.logger import applog
 
 class RecallWebhookView(APIView):
     authentication_classes: list = []
@@ -18,16 +19,16 @@ class RecallWebhookView(APIView):
             headers={k.lower(): v for k, v in request.headers.items()},
             payload=request.body.decode("utf-8"),
         )
-        print("Verified webhook")
-        print(request.body.decode("utf-8"))
 
         data = request.body.decode("utf-8")
         data = json.loads(data)
+
+        applog.webhook("recall", event=data.get("event"), path=request.path, data=data.get("data"))
 
         WebhookService.handle_webhook(data["event"], data["data"],BotProvider.RECALL, request.path)
 
         return response.success({"message": "Webhook received"})
 
     def get(self, request:Request):
-        print(request.body)
+        applog.webhook("recall", event="get_ping", path=request.path)
         return response.success({"message": "Webhook received"})

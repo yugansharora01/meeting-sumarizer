@@ -35,12 +35,14 @@ class RecallBotProvider(BaseBotProvider):
     async def get_transcript(self, bot_id: str):
         pass
 
+    async def create_transcript(self, recording_id: str):
+        await self.recall_client.create_transcript(recording_id)
+
     async def get_recording(self, bot_id: str) -> list:
         recordings = await self.recall_client.get_recording(bot_id)
         if len(recordings) == 0:
             return []
         media = recordings[0]["media_shortcuts"]
-        print(media)
         results = []
         provider_recording_id = recordings[0]["id"]
         if media.get("video_mixed"):

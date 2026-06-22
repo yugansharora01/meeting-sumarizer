@@ -188,3 +188,45 @@ RECALL_VERIFICATION_SECRET = os.getenv("RECALL_VERIFICATION_SECRET")
 
 # Supabase auth
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
+
+# ---------------------------------------------------------------------------
+# Structured logging (see apps/core/utils/logger.py -> `applog`)
+# JSON lines are written to logs/app.jsonl; view them with `manage.py logs`.
+# ---------------------------------------------------------------------------
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(exist_ok=True)
+APP_LOG_FILE = LOG_DIR / "app.jsonl"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "app_json": {
+            "()": "apps.core.utils.log_format.JsonLineFormatter",
+        },
+        "app_console": {
+            "()": "apps.core.utils.log_format.ConsoleFormatter",
+        },
+    },
+    "handlers": {
+        "app_console": {
+            "class": "logging.StreamHandler",
+            "formatter": "app_console",
+        },
+        "app_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": str(APP_LOG_FILE),
+            "maxBytes": 10 * 1024 * 1024,  # 10 MB
+            "backupCount": 5,
+            "encoding": "utf-8",
+            "formatter": "app_json",
+        },
+    },
+    "loggers": {
+        "app": {
+            "handlers": ["app_console", "app_file"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    },
+}
